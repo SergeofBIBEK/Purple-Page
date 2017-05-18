@@ -91,9 +91,11 @@
             });
 
             firebase.database().ref("Total").on("value", function(snapshot){
-                if(snapshot.val() > 0)
+                var total = snapshot.val();
+
+                if(total > 0)
                     {
-                        document.getElementById("Total").innerHTML = "<p>" + snapshot.val() + "</p>";
+                        document.getElementById("Total").innerHTML = "<p>" + total + "</p>";
                     }
                 else
                     {
