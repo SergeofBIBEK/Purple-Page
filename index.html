@@ -51,7 +51,7 @@
             {
                 firebase.database().ref("Entries").push({
                     amount: word,
-                    date: new Date().toString()
+                    date: new Date().toLocaleString()
                 });
 
                 firebase.database().ref("Total").transaction(function(total){
