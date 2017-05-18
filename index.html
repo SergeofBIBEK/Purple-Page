@@ -91,7 +91,14 @@
             });
 
             firebase.database().ref("Total").on("value", function(snapshot){
-                document.getElementById("Total").innerHTML = "<p>" + snapshot.val() + "</p>";
+                if(snapshot.val() > 0)
+                    {
+                        document.getElementById("Total").innerHTML = "<p>" + snapshot.val() + "</p>";
+                    }
+                else
+                    {
+                        document.getElementById("Total").innerHTML = "<p>COMPLETE!</p>"
+                    }
             });
 
             function count(amount, word)
