@@ -1,0 +1,64 @@
+<html>
+    <head>
+        <script src="https://www.gstatic.com/firebasejs/4.0.0/firebase.js"></script>
+        <script>
+          // Initialize Firebase
+          var config = {
+            apiKey: "AIzaSyBkwnVvY0LKMco6opuEo7rRRpkD8hK3IJ4",
+            authDomain: "countdown-1d517.firebaseapp.com",
+            databaseURL: "https://countdown-1d517.firebaseio.com",
+            projectId: "countdown-1d517",
+            storageBucket: "countdown-1d517.appspot.com",
+            messagingSenderId: "1087325302687"
+          };
+          firebase.initializeApp(config);
+        </script>
+    </head>
+
+    <body>
+        <h1>Purple Page</h1>
+
+        <h2>Total</h2>
+        <div id="Total">
+
+        </div>
+
+        <h2>History</h2>
+        <div id="History">
+
+        </div>
+
+        <h3>Controls</h3>
+        <div id="Controls">
+            <input type="button" value="Half" onclick="count(1, 'Half');">
+            <input type="button" value="Full" onclick="count(2, 'Full');">
+        </div>
+
+        <script>
+            firebase.database().ref("Entries").on("value", function(snapshot){
+                document.getElementById("History").innerHTML = " ";
+                snapshot.forEach(function(entry){
+                    document.getElementById("History").innerHTML += "<p>" + entry.val().amount + " on " + entry.val().date + "</p>";
+                });
+
+            });
+
+            firebase.database().ref("Total").on("value", function(snapshot){
+                document.getElementById("Total").innerHTML = snapshot.val();
+            });
+
+            function count(amount, word)
+            {
+                firebase.database().ref("Entries").push({
+                    amount: word,
+                    date: new Date().toString()
+                });
+
+                firebase.database().ref("Total").transaction(function(total){
+                    return total - amount;
+                });
+            }
+        </script>
+    </body>
+
+</html>
