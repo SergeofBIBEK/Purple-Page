@@ -1,5 +1,24 @@
 <html>
     <head>
+        <style>
+            body
+            {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+            }
+            .historyEntry
+            {
+                display: flex;
+                align-items: center;
+            }
+            .historyEntry input
+            {
+                margin-left: 15px;
+            }
+        </style>
+
         <script src="https://www.gstatic.com/firebasejs/4.0.0/firebase.js"></script>
         <script>
           // Initialize Firebase
@@ -23,24 +42,25 @@
 
         </div>
 
-        <h2>History</h2>
-        <div id="History">
-
-        </div>
-
         <h3>Controls</h3>
         <div id="Controls">
             <input type="button" value="Half" onclick="count(1, 'Half');">
             <input type="button" value="Full" onclick="count(2, 'Full');">
         </div>
 
+        <h2>History</h2>
+        <div id="History">
+
+        </div>
+
         <script>
             firebase.database().ref("Entries").on("value", function(snapshot){
-                document.getElementById("History").innerHTML = " ";
+                var htmlString = "";
                 snapshot.forEach(function(entry){
-                    document.getElementById("History").innerHTML += "<p>" + entry.val().amount + " on " + entry.val().date + "</p>";
+                    htmlString += "<div class='historyEntry'><p>" + entry.val().amount + " on " + entry.val().date + "</p>";
+                    htmlString += "<input type='button' value='x' amount='" + entry.val().amount + "' databaseKey='" + entry.key + "' onclick='remove(this)'></div>";
                 });
-
+                document.getElementById("History").innerHTML = htmlString;
             });
 
             firebase.database().ref("Total").on("value", function(snapshot){
@@ -63,7 +83,32 @@
                         });
                     }
             }
+
+            function remove(entry)
+            {
+                var amount = entry.getAttribute("amount");
+                var number = 0;
+
+                if (amount == "Half")
+                    {
+                        number = 1;
+                    }
+                else if (amount == "Full")
+                    {
+                        number = 2;
+                    }
+
+                var databaseKey = entry.getAttribute("databaseKey");
+
+                console.log(amount + ", " + databaseKey);
+
+                firebase.database().ref("Entries/" + databaseKey).remove();
+
+                firebase.database().ref("Total").transaction(function(total){
+                            return total + number;
+                        });
+
+            }
         </script>
     </body>
-
 </html>
