@@ -49,14 +49,19 @@
 
             function count(amount, word)
             {
-                firebase.database().ref("Entries").push({
-                    amount: word,
-                    date: new Date().toLocaleString()
-                });
+                var confirmation = confirm("Are you sure?");
 
-                firebase.database().ref("Total").transaction(function(total){
-                    return total - amount;
-                });
+                if(confirmation)
+                    {
+                        firebase.database().ref("Entries").push({
+                            amount: word,
+                            date: new Date().toLocaleString()
+                        });
+
+                        firebase.database().ref("Total").transaction(function(total){
+                            return total - amount;
+                        });
+                    }
             }
         </script>
     </body>
