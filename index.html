@@ -156,7 +156,7 @@
                 if(total > 0)
                 {
                     var HTMLString = "<p>" + total + "</p>";
-                    HTMLString += "<div class='progressBar'><div class='progressFill' style='width: " + ((1 - (total/200)) * 100).toFixed(2) +  "%;'><p>" + ((1 - (total/200)) * 100).toFixed(2) + "%" + "</p></div></div>";
+                    HTMLString += "<div class='progressBar'><div class='progressFill' style='width: " + ((1 - (total/1000)) * 100).toFixed(2) +  "%;'><p>" + ((1 - (total/1000)) * 100).toFixed(2) + "%" + "</p></div></div>";
                     document.getElementById("Total").innerHTML = HTMLString;
                 }
                 else
